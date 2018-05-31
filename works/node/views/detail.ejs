@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <script src="/assets/js/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" href="/assets/css/index.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                        aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">一个简单的首页</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <% list.forEach(function(val){ %>
+                            <li>
+                                <a href="/item/<%= val._id %>">
+                                    <%= val.listname %>
+                                </a>
+                            </li>
+                            <% }) %>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="/admin">admin</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="jumbotron">
+            <p>欢迎访问</p>            
+            <h2>电影人生</h2>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">        
+            <!-- <div class="col-md-2"></div> -->
+            <div class="col-md-12">
+                <img src="/<%= dataList.imgUrl %>"class="article-img">
+                <h2><strong><%= dataList.title %></strong></h2>
+                <p><%= dataList.intros %></p>
+                <p><span class="article-author"><%= dataList.author %>&nbsp;&nbsp;&nbsp;</span><span class="article-ctime"><%= dataList.ctime.toLocaleString() %></span></p>
+                <p class="article-content"><%- dataList.content %></p>
+                <a href="/item/<%= dataList.adminId %>" class="return-list">返回</a>
+            </div>
+            <!-- <div class="col-md-2"></div> -->
+        </div>            
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">友情链接</h3>
+            </div>
+            <div class="panel-body">
+                <% friendData.forEach(function(val){ %>
+                    <a href="http://<%= val.friendUrl %>"><img src="/<%= val.friendImg %>" class="friendImg"></a>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        canvas {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            margin-left: -300px;
+            z-index: 9;
+        }
+        #canvas2 {
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas2" width="600" height="600"></canvas>
+    <canvas id="canvas1" width="600" height="600"></canvas>
+
+    <script>
+        var canvas1 = document.querySelector('#canvas1');
+        var canvas2 = document.querySelector('#canvas2');
+        var ctx1 = canvas1.getContext('2d');
+        var ctx2 = canvas2.getContext('2d');
+        var cx1 = canvas1.width/2;
+        var cy1 = canvas1.height/2;
+        var cx2 = canvas2.width/2;
+        var cy2 = canvas2.height/2;
+        var timer = false;
+
+        var items = ['瓜子','花生','矿泉水','蛋糕','甜点','方便面','睡袋','抱枕','遮阳伞'];
+        var colors = ['#000','red','green','blue','yellow','#f40','#05f','cyan','pink'];
+
+        drawCtx1();
+        // 绘制分色盘
+        function drawCtx1(){
+            // 绘制不同奖励分色盘
+            for(var i = 0;i < items.length; i ++){
+                ctx1.beginPath();
+                ctx1.moveTo(cx1,cy1);
+                ctx1.arc(cx1,cy1,250,Math.PI*2/9*i,Math.PI*2/9*(i+1));
+                ctx1.fillStyle = colors[i];
+                ctx1.fill();
+            }
+
+            // 绘制奖品Text
+            for(var j = 0;j < items.length;j ++){
+                ctx1.save();
+                ctx1.textBaseline = 'middle';
+                ctx1.font = '30px 楷体';
+                ctx1.translate(cx1,cy1);
+                ctx1.beginPath();
+                ctx1.fillStyle = '#fff';
+                ctx1.rotate(Math.PI*2/9*j+Math.PI*2/18);
+                ctx1.fillText(items[j],150,0);
+                ctx1.restore();
+            }
+        }        
+
+        // 绘制中心圆盘
+        drawCtx2();
+        function drawCtx2(){
+            ctx2.save();
+            ctx2.beginPath();
+            ctx2.fillStyle = 'gold';
+            ctx2.arc(cx2,cy2,40,0,Math.PI*2);
+            ctx2.fill();
+            ctx2.restore();
+
+            var Img = new Image();
+            Img.src = './done.png';
+            Img.onload = function(){
+                ctx2.drawImage(Img,cx2-25,cy2-25,50,50);
+            }
+        }
+
+        canvas2.onclick = function(ev){
+            ctx2.beginPath();
+            ctx2.moveTo(cx2,cy2);
+            ctx2.beginPath();
+            ctx2.arc(cx2,cy2,25,0,Math.PI*2);
+            ctx2.clip();
+            ctx2.closePath();
+            if(ctx2.isPointInPath(ev.offsetX,ev.offsetY)){
+                // 判断是否已启动定时
+                if(timer){
+                    return;
+                }
+                // 定义控制速度变量
+                var spd = Math.floor(Math.random()*11)+100;
+                var rai = .97;
+                var angle = 0;
+                // 定义转盘转动函数及定时器
+                timer = setInterval(function(){
+                    spd *= rai;
+                    // console.log('spd:'+spd);
+                    // console.log('angle:'+angle);
+                    if(spd < .005){
+                        clearInterval(timer);
+                        timer = false;
+                        console.log(angle);
+                        angle %= 360;
+                        console.log(angle);
+                        angle = 360 - angle;
+                        console.log(angle);
+                        var index = Math.floor(angle/40);
+                        console.log(index);
+                        alert('恭喜你获得了'+items[index]);
+                        return;
+                    }else{
+                        ctx1.save();
+                        angle += spd;
+                        ctx1.translate(cx1,cy1);
+                        ctx1.rotate(Math.PI/180*angle);
+                        ctx1.translate(-cx1,-cy1);
+                        drawCtx1();
+                        ctx1.restore();
+                    }
+                },20);
+            }
+        }
+
+        // 绘制提示语
+        ctx2.beginPath();
+        ctx2.fillStyle = '#333';
+        ctx2.font = 'bold 30px 黑体';
+        ctx2.fillText('请点击√开始',0,50);
+        ctx2.closePath();
+
+        // 绘制指针
+        ctx2.save();
+        ctx2.translate(cx2,cy2);
+        ctx2.beginPath();
+        ctx2.lineCap = 'milter';
+        ctx2.lineWidth = 4;
+        ctx2.strokeStyle = '#fff';
+        ctx2.moveTo(40,0);
+        ctx2.lineTo(120,0);
+        ctx2.lineTo(120,-2);
+        ctx2.lineTo(124,0);
+        ctx2.lineTo(120,2);
+        ctx2.lineTo(120,0);
+        ctx2.lineTo(40,0);
+        ctx2.stroke();
+        ctx2.restore();
+    </script>
+</body>
+</html>

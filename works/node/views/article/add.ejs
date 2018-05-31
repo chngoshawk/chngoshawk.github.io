@@ -1,0 +1,80 @@
+<% include ../header %>
+    <script src="/ueditor/ueditor.config.js"></script>
+    <script src="/ueditor/ueditor.all.min.js"></script>
+    <div class="container">
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">文章管理页面</a>
+            </li>
+            <li>
+                <a href="#">文章添加</a>
+            </li>
+        </ol>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form action="/article/addArticle" method="POST" class="dataList" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon" id="sizing-addon1">分类</span>
+                            <select name="adminId" class="form-control">
+                                <% dataList.forEach(function(val){ %>
+                                    <option value="<%= val._id %>"><%= val.listname %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon" id="sizing-addon1">标题</span>
+                            <input type="text" class="form-control" name="title">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon" id="sizing-addon1">作者</span>
+                            <input type="text" class="form-control" name="author">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon" id="sizing-addon1">关键字</span>
+                            <input type="text" class="form-control" name="keywords">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon" id="sizing-addon1">封面</span>
+                            <input type="file" class="form-control" name="imgUrl">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon" id="sizing-addon1">简介</span>
+                            <input type="text" class="form-control" name="intros">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <textarea name="content" id="content">
+
+                        </textarea>
+                    </div>
+                </div>
+                <div>
+                    <input type="submit" class="data-submit" value="上传文章">
+                </div>
+            </form>
+            <script>
+                // 调用 富文本编辑
+                var ue = UE.getEditor('content');
+            </script>
+        </div>
+    </div>
+    <% include ../footer %>

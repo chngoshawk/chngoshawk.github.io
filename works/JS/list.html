@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>change_item</title>
+	<script src="./assets/jquery.min.js"></script>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		body {
+			font-size: 12px 'Microsoft YaHei',sans-serif;
+			background-color: #333;
+		}
+		ul,ol {
+			list-style: none;
+		}
+		.clear:after {
+			content: '';
+			display: block;
+			clear: both;
+		}
+		.clear::after {
+			content: '';
+			display: block;
+			clear: both;
+		}
+		.left {
+			float: left;
+		}
+		.right {
+			float: right;
+		}
+
+
+		.wrapper {
+			overflow: hidden;
+		}
+		.min {
+			position: relative;
+			margin-top: 50px;
+			margin-left: 20px;
+			width: 360px;
+			height: 225px;
+			border: 2px solid #999;
+		}
+		.min img {
+			width: 100%;
+			opacity: 0;
+		}
+		.cover {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 50px;
+			height: 50px;
+			background-color: rgba(0,50,200,.3);
+			display: none;
+		}
+		.item {
+			position: relative;
+			margin-top: 50px;
+			margin-left: 20px;
+		}
+		.item li {
+			margin-bottom: 40px;
+			width: 160px;
+			height: 100px;
+			border: 2px solid #999;
+		}
+		.item li img {
+			width: 100%;
+		}
+		.max {
+			position: absolute;
+			top: 50px;
+			left: 588px;
+			width: 720px;
+			height: 450px;
+			overflow: hidden;
+			border: 2px solid #999;
+			display: none;
+		}
+		.max img {
+			opacity: 0;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper clear">
+		<div class="item left">
+			<ul>
+				<li>
+					<img src="./assets/images/1.png" alt="">
+				</li>
+				<li>
+					<img src="./assets/images/2.png" alt="">
+				</li>
+				<li>
+					<img src="./assets/images/3.png" alt="">
+				</li>
+				<li>
+					<img src="./assets/images/4.png" alt="">
+				</li>
+			</ul>
+		</div>
+
+		<div class="min left">
+			<img src="./assets/images/1.png" alt="">
+			<div class="cover"></div>
+		</div>
+	</div>
+	<div class="max">
+		<img src="./assets/images/1.png" alt="">
+	</div>
+
+	<script>
+		var i = 0;
+
+		$('.min').children('img').eq(i).css({opacity:1});
+		$('.max').children('img').css({opacity:1});
+
+		function autoPlay(){
+			i++;
+			if(i > $('.item li').length - 1){
+				i = 0;
+			}
+			$('.item li').css({borderColor:'#999'}).eq(i).css({borderColor:'#fff'});
+			$('.min,.max').children('img').replaceWith($('.item li').eq(i).children('img').clone());
+			$('.min,.max').children('img').stop().animate({opacity:1},1000);
+		}
+
+		var run = setInterval(autoPlay,3000);
+
+		$('.item li').mouseover(function(){
+			clearInterval(run);
+			$('.item li').css({borderColor:'#999'});
+			$(this).css({borderColor:'#fff'});
+			$('.min,.max').children('img').replaceWith($(this).children('img').clone().css({opacity:1}));
+		}).mouseout(function(){
+			run = setInterval(autoPlay,3000);
+		});
+
+		$('.min').mouseover(function(){
+			$('.cover,.max').show();
+			clearInterval(run);
+		}).mouseout(function(){
+			$('.cover,.max').hide();
+			run = setInterval(autoPlay,3000);
+		}).mousemove(function(ev){
+			$('.max').scrollLeft((ev.pageX-$(this).offset().left)*4-$('.max').outerWidth()/2).scrollTop((ev.pageY - $(this).offset().top)*4-$('.max').outerHeight()/2);
+			if(ev.pageX-$(this).offset().left<$('.cover').outerWidth()/2){
+				$('.cover').css({left:0});
+			}else if(ev.pageX-$(this).offset().left>$(this).innerWidth()-$('.cover').outerWidth()/2){
+				$('.cover').css({left:$(this).innerWidth()-$('.cover').outerWidth()});
+			}else{
+				$('.cover').css({left:ev.pageX-$(this).offset().left-$('.cover').outerWidth()/2})
+			}
+			if(ev.pageY-$(this).offset().top<$('.cover').outerHeight()/2){
+				$('.cover').css({top:0});
+			}else if(ev.pageY-$(this).offset().top>$(this).innerHeight()-$('.cover').outerHeight()/2){
+				$('.cover').css({top:$(this).innerHeight()-$('.cover').outerHeight()});
+			}else{
+				$('.cover').css({top:ev.pageY-$(this).offset().top-$('.cover').outerHeight()/2});
+			}
+		});
+	</script>
+</body>
+</html>

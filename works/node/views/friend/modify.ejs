@@ -1,0 +1,33 @@
+<% include ../header %>
+    <div class="container">
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">友情链接管理页面</a>
+            </li>
+            <li>
+                <a href="#">友情链接修改</a>
+            </li>
+        </ol>
+    </div>
+    <div class="row">
+        <div class="col-md-3 hidden-sm hidden-xs"></div>
+        <div class="col-md-6 col-sm-12">
+            <form action="/friend/friendModified" method="POST" class="dataList">
+                <input type="hidden" name="_id" value="<%= dataList._id %>">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-addon" id="sizing-addon1">名称</span>
+                    <input type="text" class="form-control" name="friendname" value="<%= dataList.friendname %>">
+                </div>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-addon" id="sizing-addon1">网址</span>
+                    <input type="text" class="form-control" name="friendUrl" value="<%= dataList.friendUrl %>">
+                </div>
+                <div>
+                    <input type="submit" class="data-submit">
+                    <a href="/friend"><input type="button" class="data-submit" value="返回"></a>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3 hidden-sm hidden-xs"></div>
+    </div>
+    <% include ../footer %>

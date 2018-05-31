@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        h1{
+            
+            text-indent: 2em;
+        }
+        #canvas {
+            margin-left: 10px;
+            border: 1px solid #000;
+        }
+        .choose {
+            margin-left: 20px;
+            display: inline-block;
+            vertical-align: top;
+        }
+        button {
+            margin-bottom: 10px;
+            display: block;
+            width: 80px;
+            height: 40px;
+            text-align: center;
+            outline: none;
+        }
+        table {
+            margin-bottom: 10px;
+        }
+        td {
+            display: inline-block;
+            margin-right: 8px;
+            border: 1px solid transparent;
+        }
+        .choosed{
+            border: 1px solid red;
+        }
+        td button{
+            margin: 0;
+            display: block;
+            width: 20px;
+            height: 20px;
+        }
+        .weight button{
+            border: none;
+            background-color: transparent;
+        }
+        .weight button span {
+            margin: 0 auto;
+            display: block;
+            width: 80%;
+            height: 0;
+            border-radius: 20%;
+        }
+        .two {
+            border-top: 2px solid #000;
+        }
+        .four {
+            border-top: 4px solid #000;
+        }
+        .six {
+            border-top: 6px solid #000;
+        }
+        .eight {
+            border-top: 8px solid #000;
+        }
+        .ten {
+            border-top: 10px solid #000;
+        }
+        .twenty {
+            border-top: 20px solid #000;
+        }
+        .img{
+            width: 200px;
+            height: 120px;
+            border: 1px solid #ccc;
+            margin-left: 1px;
+        }
+        .show{
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <h1>canvas 自制画板</h1>
+    <canvas id="canvas" width="1000" height="600"></canvas>
+    <div class="choose">
+        <caption>选择画笔颜色:</caption>
+        <table class="clo">
+            <tr>
+                <td>
+                    <button type="button" style="background-color: #000;"></button>
+                </td>
+                <td>
+                    <button type="button" style="background-color: #fff;"></button>
+                </td>
+                <td>
+                    <button type="button" style="background-color: #f40;"></button>
+                </td>
+                <td>
+                    <button type="button" style="background-color: red;"></button>
+                </td>
+                <td>
+                    <button type="button" style="background-color: gray;"></button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" style="background-color: green;"></button>
+                </td>
+                <td>
+                    <button type="button" style="background-color: cyan;"></button>
+                </td>
+                <td>
+                    <button type="button" style="background-color: blue;"></button>
+                </td>
+                <td>
+                    <button type="button" style="background: yellow;"></button>
+                </td>
+                <td>
+                    <button type="button" style="background-color: orange;"></button>
+                </td>
+            </tr>
+        </table>
+        <caption>选择画笔粗细:</caption>
+        <table class="weight">
+                <tr>
+                    <td>
+                        <button type="button"><span class="two"></span></button>
+                    </td>
+                    <td>
+                        <button type="button"><span class="four"></span></button>
+                    </td>
+                    <td>
+                        <button type="button"><span class="six"></span></button>
+                    </td>
+                    <td>
+                        <button type="button"><span class="eight"></span></button>
+                    </td>
+                    <td>
+                        <button type="button"><span class="ten"></span></button>
+                    </td>
+                    <td>
+                        <button type="button"><span class="twenty"></span></button>
+                    </td>
+                </tr>
+            </table>
+        <button class="draw">作画</button>
+        <button class="wipe">橡皮擦</button>
+        <button class="reset">重置画板</button>
+        <button class="save">作品保存</button>
+    </div>
+
+    <div class="show"></div>
+    <script>
+        var cols = document.querySelectorAll('.clo td');
+        var weis = document.querySelectorAll('.weight td');
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        var cx = canvas.width;
+        var cy = canvas.height;
+        var colors = ['#000','#fff','#f40','red','gray','green','cyan','blue','yellow','orange',];
+        var widths = [2,4,6,8,10,20];
+        var color = '#000';
+        var iniWidth = 2;
+
+        var draw = document.querySelector('.draw');
+        var wipe = document.querySelector('.wipe');
+        var rest = document.querySelector('.reset');
+        var save = document.querySelector('.save');
+        var show = document.querySelector('.show');
+
+        ctx.lineWidth = iniWidth;
+        ctx.fillStyle = color;
+        ctx.strokeStyle = color;
+        // 设置选择画笔样式按钮变化
+        changeCol();
+        function changeCol(){
+            for(let i = 0;i < cols.length;i ++){
+                cols[i].onclick = function(){
+                    for(var j = 0;j < cols.length;j ++){
+                        cols[j].classList.remove('choosed');
+                    }
+                    this.classList.add('choosed');
+                    color = colors[i];
+                }
+            }
+            for(let n = 0;n < weis.length;n ++){
+                weis[n].onclick = function(){
+                    for(var m = 0;m < weis.length;m ++){
+                        weis[m].classList.remove('choosed');
+                    }
+                    this.classList.add('choosed');
+                    iniWidth = widths[n];
+                }
+            }
+        }
+
+        //定义鼠标点击起始坐标
+        var mCo = null;
+
+        //点击画画按钮开始作画
+        draw.onclick = ini_draw;
+        ini_draw();
+
+        //定义作画函数
+        function ini_draw(){
+            canvas.onmousedown = function(e){
+                mCo = [e.offsetX,e.offsetY];
+                ctx.beginPath();
+                ctx.lineJoin = 'round';
+                ctx.lineCap = 'round';
+                ctx.lineWidth = iniWidth;
+                ctx.strokeStyle = color;
+                ctx.fillStyle = color;
+                ctx.moveTo(mCo[0],mCo[1]);
+                ctx.lineTo(mCo[0],mCo[1]);
+                ctx.stroke();
+                canvas.onmousemove = function(ev) {
+                    ctx.beginPath();                
+                    ctx.moveTo(mCo[0],mCo[1]);
+                    ctx.lineTo(ev.offsetX,ev.offsetY);
+                    ctx.stroke();
+                    
+                    mCo = [ev.offsetX,ev.offsetY];
+            }
+            }
+            canvas.onmouseup = function(){
+                canvas.onmousemove = function(){
+                    mCo = null;
+                }
+            }
+        }
+
+        //定义橡皮擦函数
+        wipe.onclick = function(){
+            canvas.onmousedown = function(e){
+                mCo = [e.offsetX,e.offsetY];
+                ctx.beginPath();
+                ctx.lineJoin = 'round';
+                ctx.lineCap = 'round';
+                ctx.lineWidth = 40;
+                ctx.strokeStyle = '#fff';
+                ctx.fillStyle = '#fff';
+                ctx.moveTo(mCo[0],mCo[1]);
+                ctx.lineTo(mCo[0],mCo[1]);
+                ctx.stroke();
+                canvas.onmousemove = function(ev){
+                    ctx.beginPath();                
+                    ctx.moveTo(mCo[0],mCo[1]);
+                    ctx.lineTo(ev.offsetX,ev.offsetY);
+                    ctx.stroke();
+                    
+                    mCo = [ev.offsetX,ev.offsetY];
+                }
+            }
+        }
+
+        // 定义重置画布函数
+        rest.onclick = function(){
+            ctx.save();
+            ctx.beginPath();
+            ctx.clearRect(0,0,cx,cy);
+            ctx.restore();
+            ini_draw();
+        }
+
+        // 定义保存函数
+        save.onclick = function(){
+            var imageData = canvas.toDataURL();
+            var Img = new Image();
+            Img.src = imageData;
+            Img.onload = function (){
+                Img.classList.add('img');
+                show.appendChild(Img);
+            }
+        }
+    </script>
+</body>
+</html>
