@@ -1,0 +1,36 @@
+<% include ../header %>
+    <div class="container">
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">友情链接管理页面</a>
+            </li>
+            <li>
+                <a href="#">友情链接列表</a>
+            </li>
+        </ol>
+    </div>
+    <div class="row">
+        <div class="col-md-3 hidden-sm hidden-xs"></div>
+        <div class="col-md-6 col-sm-12">
+            <form action="/friend/addFriend" method="POST" class="dataList" enctype="multipart/form-data">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-addon" id="sizing-addon1">名称</span>
+                    <input type="text" class="form-control" name="friendname">
+                </div>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-addon" id="sizing-addon1">网址</span>
+                    <input type="text" class="form-control" name="friendUrl">
+                </div>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-addon" id="sizing-addon1">Logo</span>
+                    <input type="file" class="form-control" name="friendImg">
+                </div>
+                <div>
+                    <input type="submit" class="data-submit">
+                    <a href="/friend"><input type="button" class="data-submit" value="返回"></a>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3 hidden-sm hidden-xs"></div>
+    </div>
+    <% include ../footer %>

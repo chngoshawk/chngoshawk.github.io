@@ -1,0 +1,67 @@
+<% include ../header %>
+    <div class="container">
+        <ol class="breadcrumb">
+            <li>
+                <a href="#"> 友情链接管理系统</a>
+            </li>
+            <li>
+                <a href="#"> 友情链接列表</a>
+            </li>
+        </ol>
+    </div>
+    <div class="container">
+        <table class="table">
+            <tr class="user-table">
+                <th>名称</th>
+                <th>地址</th>
+                <th>图片地址</th>
+                <th>操作</th>
+            </tr>
+            <% dataList.forEach(function(val){ %>
+            <tr>
+                <td>
+                    <%= val.friendname %>
+                </td>
+                <td>
+                    <%= val.friendUrl %>
+                </td>
+                <td>
+                    <%= val.friendImg %>
+                </td>
+                <td>
+                    <a href="/friend/modify/<%= val._id %>">编辑</a>
+                    |
+                    <a href="/friend/del/<%= val._id %>" onclick="return confirm('你确定要删除吗?')">删除</a>
+                </td>
+            </tr>
+            <% }) %>
+        </table>
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li>
+                    <a href="/friend/list/?page=1">首页</a>
+                </li>
+                <li>
+                    <a href="/friend/list/?page=<%= page -1 %>" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <% for(var i = 1;i <= pages;i++){ %>
+                <li>
+                    <a href="/friend/list/?page=<%= i %>">
+                        <%= i %>
+                    </a>
+                </li>
+                <% } %>
+                <li>
+                    <a href="/friend/list/?page=<%= -(-page-1) %>" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/friend/list/?page=<%= pages %>">尾页</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <% include ../footer %>

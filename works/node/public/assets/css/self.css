@@ -1,0 +1,20 @@
+.input-group-lg {
+    margin-bottom: 1em;
+}
+.table{
+    table-layout: fixed;
+}
+.table th,.table td {
+    text-indent: 2em;
+}
+.main{
+    overflow: hidden;
+}
+.fallback:hover{
+    color: #676A6D;
+}
+.data-submit{
+    margin-top: 8px;
+    color: #676A6D;
+    padding: 8px 12px;
+}
