@@ -9,3 +9,7 @@ mongod
 
 npm start
 ````
+
+update log
+
+#### 2024/08/29 更新平安项目作品
